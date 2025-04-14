@@ -17,7 +17,7 @@ gh = Github(github_token)
 
 # Load repo and issue
 repo = gh.get_repo(repo_name)
-issues = repo.get_issues(state='open', labels=[repo.get_label("codegen")])
+issues = repo.get_issues(state='open', labels=["codegen"])
 
 if issues.totalCount == 0:
     print("No open issues with 'codegen' label.")
