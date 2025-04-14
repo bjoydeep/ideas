@@ -1,7 +1,10 @@
 import os
-import openai
+#import openai
 from github import Github
 from datetime import datetime
+
+from openai import OpenAI
+
 
 # Check API keys
 openai_key = os.getenv("OPENAI_API_KEY")
@@ -11,8 +14,11 @@ repo_name = os.getenv("GITHUB_REPOSITORY")
 if not openai_key or not github_token or not repo_name:
     raise RuntimeError("Missing required environment variables.")
 
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+
 # Set keys
-openai.api_key = openai_key
+#openai.api_key = openai_key
 gh = Github(github_token)
 
 # Load repo and issue
@@ -43,7 +49,7 @@ Requirements:
 """
 
 try:
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a senior Python developer."},
@@ -54,7 +60,8 @@ except Exception as e:
     print(f"OpenAI API error: {e}")
     exit(1)
 
-code = response['choices'][0]['message']['content']
+code = response.choices[0].message.content
+#code = response['choices'][0]['message']['content']
 filename = f"generated_{issue.number}.py"
 
 with open(filename, "w") as f:
