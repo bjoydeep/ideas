@@ -1,0 +1,42 @@
+name: CodeGen from Issue
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+jobs:
+  generate-code:
+    # Comment out the next line during debugging if needed
+    # if: contains(github.event.issue.labels.*.name, 'codegen')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install openai PyGithub
+
+      - name: Print issue labels
+        run: echo "Labels: ${{ toJson(github.event.issue.labels) }}"
+
+      - name: Confirm environment variables
+        run: |
+          echo "OPENAI_API_KEY is set: ${{ secrets.OPENAI_API_KEY != '' }}"
+          echo "GITHUB_REPOSITORY=${{ github.repository }}"
+
+      - name: List script folder contents
+        run: ls -la .github/scripts
+
+      - name: Run codegen script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python .github/scripts/codegen_from_issue.py
+
