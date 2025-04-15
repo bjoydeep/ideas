@@ -1,26 +1,33 @@
-Here is the code that fulfills all the requirements mentioned in the GitHub issue.
+Sure, I can generate a Python code as per your requirement. See the snippet below:
 
 ```python
 from typing import List
 
 def calculate_moving_average(data: List[float], window: int) -> List[float]:
-    # input validation
+    # Input Validation
     if not isinstance(data, list) or not all(isinstance(i, (int, float)) for i in data):
-        raise ValueError("data should be a list of numbers")
+        raise ValueError("Invalid input data, expected a list of numeric values.")
     if not isinstance(window, int) or window <= 0:
-        raise ValueError("window should be a positive integer")
+        raise ValueError("Invalid window size, should be a positive integer.")
+    if window > len(data):
+        raise ValueError("Window size should not be larger than the size of the data.")
+    
+    mov_avg = []
+    for i in range(len(data) - window + 1):
+        avg = sum(data[i: i + window]) / window
+        mov_avg.append(round(avg, 2))
+    return mov_avg
 
-    # calculate moving average
-    return [sum(data[i: i + window]) / window for i in range(len(data) - window + 1)]
-
-# test case
+# Unit test
 def test_calculate_moving_average():
-    data = [1.0, 2.0, 3.0, 4.0, 5.0]
-    window = 3
-    expected_output = [2.0, 3.0, 4.0]
-    assert calculate_moving_average(data, window) == expected_output
+    sample_data = [2.5, 3.2, 4.9, 5.1, 6.3, 7.4]
+    window_size = 3
+    expected_result = [3.53, 4.4, 5.44, 6.27]
+    assert calculate_moving_average(sample_data, window_size) == expected_result
 
 test_calculate_moving_average()
 ```
 
-This code defines a function that calculates a moving average of a list of floats. It checks if the inputs are valid. If the inputs are not valid, it raises a ValueError with an appropriate message. It also includes a simple test case to verify that the function works as expected.
+In this code, the `calculate_moving_average` function calculates the moving average from a provided list of floats over a given window. The function validates the inputs to ensure that the data is a list of numeric values, window is a positive integer, and that the window size is not larger than the size of the data. The `test_calculate_moving_average` function serves as the unit test for the moving average function.
+
+Disclaimer: The use of assert statements in production code is generally discouraged, they should be used in test cases and debugging.
