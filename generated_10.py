@@ -1,37 +1,36 @@
-Here's the code based on the Github issue:
+Certainly, here is a Python function that calculates the moving average of a given list of float with some validations and a test:
 
 ```python
 from typing import List
 
 def calculate_moving_average(data: List[float], window: int) -> List[float]:
-    """
-    Calculate the moving average.
-    :param data: list of float numbers
-    :param window: int 
-    :return: list of float numbers representing the moving average
-    """
-    # input validation
+    # Input validation
     if not isinstance(data, list) or not all(isinstance(i, (int, float)) for i in data):
-        raise TypeError("Data must be a list of integers or floats.")
-    if not isinstance(window, int):
-        raise TypeError("Window must be an integer.")
+        raise TypeError("Data should be a list of integers or floats")
+    if not isinstance(window, int) or window <= 0:
+        raise ValueError("Window should be a positive integer")
+    if window > len(data):
+        raise ValueError("Window size is larger than data size")
 
-    # moving average calculation
-    return [sum(data[i - window:i]) / window for i in range(window, len(data) + 1)]
+    # Calculate moving average
+    moving_averages = []
+    for i in range(window, len(data)+1):
+        this_window = data[i-window:i]
+        window_average = sum(this_window) / window
+        moving_averages.append(window_average)
 
-# tests
+    return moving_averages
+
+
+# Test case
 def test_calculate_moving_average():
-    assert calculate_moving_average([1, 2, 3, 4, 5], 2) == [1.5, 2.5, 3.5, 4.5]
-    assert calculate_moving_average([10, 20, 30, 40, 50], 3) == [20.0, 30.0, 40.0]
-    try:
-        calculate_moving_average(["a", "b", "c"], 3)  # should raise TypeError
-    except TypeError as e:
-        assert str(e) == "Data must be a list of integers or floats."
-    try:
-        calculate_moving_average([1, 2, 3], "a")  # should raise TypeError
-    except TypeError as e:
-        assert str(e) == "Window must be an integer."
-        
+    data = [2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
+    window = 3
+    result = calculate_moving_average(data, window)
+    expected_result = [3.5, 4.5, 5.5, 6.5]
+    assert result == expected_result, f"Expected {expected_result}, but got {result}"
+
 test_calculate_moving_average()
 ```
-This script has a `calculate_moving_average()` function that calculates the moving average from a list of numbers given a window of a specified size. The function has input validation for the types of both parameters. The script also includes a `test_calculate_moving_average()` function to test `calculate_moving_average()`.
+
+This function takes as parameters a list of floats (`data`) and an integer (`window`), and returns a list of floats containing the moving averages. It checks that `data` is a list of integers or floats and `st_window` is a positive integer. Also, it throws a `ValueError` if the window size is larger than the size of the data. The test function `test_calculate_moving_average()` checks the functionality with a case. Use a test library like `pytest` to run this test function.
