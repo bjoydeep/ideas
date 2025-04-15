@@ -1,27 +1,34 @@
-Below is the Python code.
+Sure, here is a Python function that accomplishes just that:
 
 ```python
-# Import required libraries
 from typing import List
 
 def calculate_moving_average(data: List[float], window: int) -> List[float]:
     if not isinstance(data, list) or not all(isinstance(i, (int, float)) for i in data):
-        raise ValueError("Input data should be a list of integers or floats.")
+        raise ValueError('Data should be a list of floats or integers.')
     if not isinstance(window, int) or window <= 0:
-        raise ValueError("Window size should be a positive integer.")
-    if len(data) < window:
-        raise ValueError("Window size should be less than or equal to the length of data.")
+        raise ValueError('Window size should be a positive integer.')
+    if window > len(data):
+        raise ValueError('Window size should not be larger than the size of the data.')
+    
+    moving_averages = []
+    for i in range(len(data) - window + 1):
+        average = sum(data[i:i + window]) / window
+        moving_averages.append(average)
+        
+    return moving_averages
 
-    return [sum(data[i - window:i]) / window for i in range(window, len(data) + 1)]
 
-# Test case
 def test_calculate_moving_average():
-    data = [1.5, 2.5, 3.5, 4.5, 5.5]
+    data = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
     window = 3
-    result = calculate_moving_average(data, window)
-    print("Test case - calculate_moving_average: {}".format('Pass' if result == [2.5, 3.5, 4.5] else 'Fail'))
+    expected_output = [2.0, 3.0, 4.0, 5.0]
+    assert calculate_moving_average(data, window) == expected_output
+    print('Test passed.')
 
-# Run test
 test_calculate_moving_average()
 ```
-This will calculate the moving average for a provided list of data over the specified window size. Basic input validation is performed to ensure the data is a list of integers or floats, the window size is a positive integer, and that the window size is less than or equal to the length of the list of data.
+
+This code starts with some necessary input validation, then calculates the moving averages within the specified window size. After the function is defined, a test is run to make sure it works as intended.
+
+Just make sure to run the `test_calculate_moving_average()` each time you want to test your function. It's currently testing a case with raw decimal values, but you can customize it to match your specific use case.
