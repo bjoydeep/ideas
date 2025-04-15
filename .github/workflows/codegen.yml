@@ -7,7 +7,7 @@ on:
 jobs:
   generate-code:
     # Comment out the next line during debugging if needed
-    # if: contains(github.event.issue.labels.*.name, 'codegen')
+    if: contains(github.event.issue.labels.*.name, 'codegen')
     runs-on: ubuntu-latest
 
     steps:
