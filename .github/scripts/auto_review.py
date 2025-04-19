@@ -1,11 +1,21 @@
-import os
+import os, json, sys
 from github import Github
 import openai
+
+# load event JSON
+event_path = os.environ.get("GITHUB_EVENT_PATH")
+if not event_path or not os.path.exists(event_path):
+    print("ERROR: GITHUB_EVENT_PATH not set or invalid", file=sys.stderr)
+    sys.exit(1)
+
+with open(event_path) as f:
+    data = json.load(f)
+pr_number = data["pull_request"]["number"]
 
 # Environment & context
 gh = Github(os.environ["GITHUB_TOKEN"])
 repo = gh.get_repo(os.environ["GITHUB_REPOSITORY"])
-pr_number = int(os.environ["GITHUB_REF"].split("/")[-1])
+#pr_number = int(os.environ["GITHUB_REF"].split("/")[-1])
 pr = repo.get_pull(pr_number)
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
