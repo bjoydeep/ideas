@@ -1,9 +1,15 @@
 # .github/workflows/auto-code-review.yml
 name: “Auto Code Review”
 
+# on:
+#   pull_request:
+#     types: [opened, synchronize, reopened]
+
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_run:
+    workflows: ["CodeGen from Issue"]
+    types: [completed]
+
 
 permissions:
   pull-requests: write   # needed to post reviews/comments
@@ -11,6 +17,7 @@ permissions:
 
 jobs:
   review:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR
