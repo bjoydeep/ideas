@@ -1,6 +1,6 @@
 import os, json, sys
 from github import Github
-import openai
+from openai import OpenAI
 
 # load event JSON
 event_path = os.environ.get("GITHUB_EVENT_PATH")
@@ -18,7 +18,8 @@ repo = gh.get_repo(os.environ["GITHUB_REPOSITORY"])
 #pr_number = int(os.environ["GITHUB_REF"].split("/")[-1])
 pr = repo.get_pull(pr_number)
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+openai_key = os.environ["OPENAI_API_KEY"]
+client = OpenAI(api_key=openai_key)
 
 # Gather changed files & diffs
 files = pr.get_files()
@@ -34,7 +35,8 @@ for f in files:
         continue
 
     # Send the diff to OpenAI for review
-    resp = openai.ChatCompletion.create(
+    #resp = openai.ChatCompletion.create(
+    resp = client.chat.completions.create(    
         model="gpt-4o-mini",
         messages=[
           {"role": "system", "content": "You are a code review assistant."},
