@@ -28,8 +28,12 @@ jobs:
 
       - name: Confirm environment variables
         run: |
-          echo "OPENAI_API_KEY is set: ${{ secrets.OPENAI_API_KEY != '' }}"
-          echo "GITHUB_REPOSITORY=${{ github.repository }}"
+            if: |
+            github.event_name == 'issues' &&
+            github.event.action == 'labeled' &&
+            github.event.label.name == 'codegen'
+            echo "OPENAI_API_KEY is set: ${{ secrets.OPENAI_API_KEY != '' }}"
+            echo "GITHUB_REPOSITORY=${{ github.repository }}"
 
       - name: List script folder contents
         run: ls -la .github/scripts

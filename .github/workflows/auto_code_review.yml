@@ -1,11 +1,11 @@
 # .github/workflows/ai-code-review.yml
-name: “AI Code Review”
+name: AI Code Review
 
 on:
   # keep your auto‑PR triggers if you still want them:
   # does this do anything at all?
-  pull_request:
-    types: [opened, synchronize, reopened]
+  #pull_request:
+  #  types: [opened, synchronize, reopened]
 
   # add this to let you run it by hand
   workflow_dispatch:
