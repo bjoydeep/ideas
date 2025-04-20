@@ -4,6 +4,18 @@ import json
 from github import Github
 from openai import OpenAI
 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--pr", type=int, help="PR number to review")
+args = parser.parse_args()
+
+# if args.pr:
+#     pr_number = args.pr
+# else:
+
+pr_number = args.pr
+
 # ─── Load webhook/event payload ───────────────────────────────────────────────
 event_path = os.environ.get("GITHUB_EVENT_PATH")
 if not event_path or not os.path.exists(event_path):
@@ -12,8 +24,9 @@ if not event_path or not os.path.exists(event_path):
 
 with open(event_path, 'r') as fp:
     data = json.load(fp)
+    print(data)
 
-# ─── Determine PR number ───────────────────────────────────────────────────────
+""" # ─── Determine PR number ───────────────────────────────────────────────────────
 pr_number = None
 
 # 1) Direct pull_request webhook
@@ -42,7 +55,7 @@ else:
         sys.exit(1)
 
     pr_number = pulls[0].number
-
+ """
 # sanity check
 if pr_number is None:
     print("ERROR: Unable to determine PR number", file=sys.stderr)
